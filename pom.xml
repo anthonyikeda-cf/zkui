@@ -12,8 +12,27 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <revision>0-SNAPSHOT</revision>
+        <project.scm.id>my-scm-server</project.scm.id>
     </properties>
-    
+
+    <scm>
+        <connection>scm:git:https://github.com/anthonyikeda-cf/zkui.git</connection>
+    </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>local-nexus</id>
+            <name>Releases</name>
+            <url>http://localhost:9081/respository/maven-releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>local-nexus</id>
+            <name>Snapshot</name>
+            <url>http://localhost:9081/repository/maven-snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <dependencies>
         
         <dependency>
@@ -144,7 +163,18 @@
                     </execution>
                 </executions>
             </plugin>
-            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>                
+            </plugin>
+            <plugin>
+                <artifactId>maven-scm-plugin</artifactId>
+                <version>1.9.4</version>
+                <configuration>
+                    <tag>${project.artifactId}-${project.version}</tag>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>
