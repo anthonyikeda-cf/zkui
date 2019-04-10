@@ -21,6 +21,7 @@ import com.deem.zkui.dao.Dao;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Date;
+import java.util.Optional;
 import java.util.Properties;
 import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.http.HttpVersion;
@@ -49,9 +50,17 @@ public class Main {
 
         logger.debug("Starting ZKUI!");
         Properties globalProps = new Properties();
-        File f = new File("config.cfg");
-        if (f.exists()) {
-            globalProps.load(new FileInputStream("config.cfg"));
+        System.out.println(System.getenv().get("ZKUI_CONFIG"));
+        Optional<String> configFile = Optional.of(System.getenv().get("ZKUI_CONFIG"));
+
+        File config = configFile.map(file -> {
+            File f = new File(file);
+            return f;
+        }).orElseGet(() -> new File("config.cfg"));
+
+
+        if (config.exists()) {
+            globalProps.load(new FileInputStream(config));
         } else {
             System.out.println("Please create config.cfg properties file and then execute the program!");
             System.exit(1);
